@@ -22,7 +22,7 @@ const db = buildDBClient(":memory:", true);
 const requestSchema = z.object({
     message: z.string(),
 });
-const ZRequest = z.infer<typeof requestSchema>;
+type ZRequest = z.infer<typeof requestSchema>;
 
 // Init the queue
 const queue = new SqliteQueue<ZRequest>("requests", db, {
@@ -60,6 +60,8 @@ const worker = new Runner<ZRequest>(
     validator: requestSchema,
   },
 );
+
+await worker.run();
 
 ```
 
